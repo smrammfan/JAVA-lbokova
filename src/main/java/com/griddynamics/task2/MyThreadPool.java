@@ -42,8 +42,6 @@ public class MyThreadPool {
             tasksQueue.addElement(new RunnableTask(task, delay));
             this.tasksSubmittedCount++;
         } else {
-
-            //stopAllActiveThreads();
             throw new ThreadPoolException("You cannot submit task when Thread Pool is shutted down!");
         }
     }
@@ -54,34 +52,11 @@ public class MyThreadPool {
             printAllThreadsState();
         } else if(!isShittedDown() && tasksSubmittedCount < threads.size()) {
             waitAllThreadsExecuteTheirTask();
-            waitAllThreadsBecomeTerminated();
             stopAllActiveThreads();
         } else if(isShittedDown()) {
             waitAllThreadsBecomeTerminated();
             stopAllActiveThreads();
         }
-
-        //    } else if((!isShittedDown() && tasksSubmittedCount < threads.size()) || isShittedDown()) {
-       /* } else {
-            //waitAllThreadsBecomeTerminated();
-            waitTasksCompletionBeforeShutDownWhenMoreTasksThenThreads(timeoutMilis);
-            printAllThreadsState();
-            stopAllActiveThreads();
-        }
-         */
-       /*else {
-
-            threads.forEach(thread -> {
-                try {
-                    System.out.println("Here!");
-                    printThreadState(thread);
-                    thread.join(timeoutMilis);
-                } catch (InterruptedException e) {
-                    System.out.println("Thread join interrupted!");
-                    e.printStackTrace();
-                }
-            });
-        }*/
     }
 
     private void waitAllThreadsExecuteTheirTask() {
@@ -93,7 +68,6 @@ public class MyThreadPool {
 
     private void waitAllThreadsBecomeTerminated() {
         int countFinishedThreads = calculateCountOfTerminatedThreads();
-        //while ((countFinishedThreads != threads.size() && countFinishedThreads != tasksSubmittedCount) ) {
         while (((countFinishedThreads != threads.size() && countFinishedThreads != tasksSubmittedCount) || getCountExecutedTasks() != tasksSubmittedCount) ) {
             countFinishedThreads = sleepAndCheckCountOFTerminatedThreads(countFinishedThreads);
         }
@@ -137,10 +111,6 @@ public class MyThreadPool {
 
     public int getCountExecutedTasks() {
         return this.tasksQueue.getTasksExecutedCount();
-    }
-
-    public int getQueueSize() {
-        return this.tasksQueue.getQueueSize();
     }
 
     private void printThreadState(Thread thread) {

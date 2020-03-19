@@ -5,7 +5,7 @@ import org.apache.log4j.Logger;
 
 public class Main {
 
-    public static final String SOURCE_FILE_PATH_SPLIT_BY_MEMORY_SIZE = "Source_4mb.txt";
+    public static final String SOURCE_FILE_PATH_SPLIT_BY_MEMORY_SIZE = "Source_2mb.txt";
     public static final String SOURCE_FILE_PATH_SPLIT_BY_LINES_COUNT = "SourceFixed.txt";
     public static final int ALLOWED_MAX_LINES_COUNT_TO_READ = 4;
 
@@ -14,9 +14,9 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-            runWithSplitByMemorySize();
+            runWithSplitByLinesCount();
             //or
-            //runWithSplitByLinesCount();
+            //runWithSplitByMemorySize();
         } catch (FilesOperationException e) {
             LOGGER.error("There is an error during application execution: " + e.getMessage());
             if(e.getCause() != null) {
