@@ -1,0 +1,152 @@
+package com.griddynamics.task1;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.nio.file.*;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+public class FileUtils {
+
+    public static String removeExtensionFromFilePath(String filePath) {
+        return filePath.split("\\.")[0];
+    }
+
+    public static String getFileNameWithExtensionFromPath(String filePath) {
+        return Paths.get(filePath).getFileName().toString();
+    }
+
+    public static String getFolderNameFromPath(String folderPath) {
+        return folderPath.substring(folderPath.lastIndexOf(System.getProperty("file.separator"))+1);
+    }
+
+    public static String getFilesExtensionInFolder(String folderPath) throws FilesOperationException {
+        String extension = "";
+        if(Files.isDirectory(Paths.get(folderPath))) {
+            try (Stream<Path> allFilesInFolder = Files.list(Paths.get(folderPath))) {
+                Optional<Path> firstFilePath = allFilesInFolder.findFirst();
+                if (firstFilePath.isPresent()) {
+                    String filePath = firstFilePath.get().toString();
+                    extension = filePath.substring(filePath.lastIndexOf("."));
+                }
+            } catch (IOException e) {
+                throw new FilesOperationException("Error during getting file extension in folder " + folderPath, e.getCause());
+            }
+        }
+        return extension;
+    }
+
+    public static long getFileSize(Path filePath) throws FilesOperationException {
+        try {
+            return Files.size(filePath);
+        } catch (IOException e) {
+            throw new FilesOperationException("Error during getting file size " + filePath.getFileName(), e.getCause());
+        }
+    }
+
+    public static void writeLinesToFile(Collection<String> linesToWrite, Path filePath, OpenOption... writeOptions) throws FilesOperationException {
+        try(BufferedWriter writer = Files.newBufferedWriter(filePath, writeOptions)) {
+            for (String line : linesToWrite) {
+                writer.write(line);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            throw new FilesOperationException("Error during write to file " + filePath.getFileName(), e.getCause());
+        }
+    }
+
+    public static void writeLineToFile(BufferedWriter writer, String lineToWrite) throws FilesOperationException {
+        try {
+            writer.write(lineToWrite);
+            writer.newLine();
+        } catch (IOException e) {
+            throw new FilesOperationException("Error during write to file", e.getCause());
+        }
+    }
+
+    public static void createFolderForSubFilesIfNotExists(String folderPath) throws FilesOperationException {
+        Path pathToFolder = Paths.get(folderPath);
+        if (!Files.exists(pathToFolder)) {
+            try{
+                Files.createDirectory(pathToFolder);
+            } catch (IOException e) {
+                throw new FilesOperationException("Error when try to create folder " + folderPath, e.getCause());
+            }
+        }
+    }
+
+    public static void removeAllFilesFromFolderIfFolderExists(String folderPath) throws FilesOperationException {
+        Path pathToFolder = Paths.get(folderPath);
+        if(Files.exists(pathToFolder) && Files.isDirectory(pathToFolder))
+        {
+            try(Stream<Path> files = Files.list(pathToFolder)) {
+                files.forEach(filePath -> {
+                    try {
+                        Files.delete(filePath);
+                    }   catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+            } catch (IOException e) {
+                throw new FilesOperationException("Error during removing files from folder " + folderPath, e.getCause());
+            }
+        }
+    }
+
+    public static void removeFolderAndSubFiles(String folderPath) throws FilesOperationException {
+        removeAllFilesFromFolderIfFolderExists(folderPath);
+        Path pathToFolder = Paths.get(folderPath);
+        try {
+            Files.deleteIfExists(pathToFolder);
+        } catch (IOException e) {
+            throw new FilesOperationException("Error during removing folder " + folderPath, e.getCause());
+        }
+    }
+
+    public static long getFilesCountInFolder(String folderPath) throws FilesOperationException {
+        long filesCount = 0;
+        if(Files.isDirectory(Paths.get(folderPath))) {
+            try (Stream<Path> allFilesInFolder = Files.list(Paths.get(folderPath))) {
+                filesCount = allFilesInFolder.count();
+            } catch (IOException e) {
+                throw new FilesOperationException("Error during getting file extension in folder " + folderPath, e.getCause());
+            }
+        }
+        return filesCount;
+    }
+
+    public static String getFileInFolder(String folderPath, String fileNamePart) throws FilesOperationException {
+        String pathToFile = "";
+        if(Files.isDirectory(Paths.get(folderPath))) {
+            try (Stream<Path> allFilesInFolder = Files.list(Paths.get(folderPath))) {
+                Set<Path> foundFile = allFilesInFolder.filter(path -> path.getFileName().toString().contains(fileNamePart))
+                                                        .collect(Collectors.toSet());
+                if(!foundFile.isEmpty()) {
+                    pathToFile = foundFile.toString();
+                }
+            } catch (IOException e) {
+                throw new FilesOperationException("Error during getting file extension in folder " + folderPath, e.getCause());
+            }
+        }
+        return pathToFile.replaceAll("]", "");
+    }
+
+    public static List<String> readAllFile(String filePath) throws FilesOperationException {
+        List<String> allLines = new ArrayList<String>();
+        String line;
+        try (BufferedReader reader = Files.newBufferedReader(Paths.get(filePath))){
+            while ((line = reader.readLine()) != null) {
+                allLines.add(line);
+            }
+        } catch (IOException e) {
+            throw new FilesOperationException("Error during reading file " + filePath, e.getCause());
+        }
+        return allLines;
+    }
+
+    public static boolean checkPathExists(String filePath) throws FilesOperationException {
+        return Files.exists(Paths.get(filePath));
+    }
+}
