@@ -5,7 +5,6 @@ import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import sun.jvm.hotspot.utilities.Assert;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
@@ -49,8 +48,8 @@ public class Tests {
         SubFilesCreator subFilesCreator = new SubFilesCreator(testFilePath, 4);
         String subFilesFolder = subFilesCreator.createSortedSubFiles();
         workingFolders.add(subFilesFolder);
-        Assert.that(FileUtils.checkPathExists(subFilesFolder) == true,"Folder for sub files wasn't created!");
-        Assert.that(FileUtils.getFilesCountInFolder(subFilesFolder) == 3,"Wrong number files was created!");
+        assertThat(FileUtils.checkPathExists(subFilesFolder)).as("Folder for sub files wasn't created!").isEqualTo(true);
+        assertThat(FileUtils.getFilesCountInFolder(subFilesFolder)).as("Wrong number files was created!").isEqualTo(3);
     }
 
     @Test
@@ -59,8 +58,8 @@ public class Tests {
         SubFilesCreator subFilesCreator = new SubFilesCreator(testFilePath, 10);
         String subFilesFolder = subFilesCreator.createSortedSubFiles();
         workingFolders.add(subFilesFolder);
-        Assert.that(FileUtils.checkPathExists(subFilesFolder) == true,"Folder for sub files wasn't created!");
-        Assert.that(FileUtils.getFilesCountInFolder(subFilesFolder) == 1,"Wrong number files was created!");
+        assertThat(FileUtils.checkPathExists(subFilesFolder)).as("Folder for sub files wasn't created!").isEqualTo(true);
+        assertThat(FileUtils.getFilesCountInFolder(subFilesFolder)).as("Wrong number files was created!").isEqualTo(1);
     }
 
     @Test
@@ -72,19 +71,19 @@ public class Tests {
         String filePath = FileUtils.getFileInFolder(subFilesFolder, "1_");
         //file #1
         List<String> allLines = FileUtils.readAllFile(buildTestResultFilePath(subFilesFolder, filePath));
-        Assert.that(allLines.size() == EXPECTED_SORTED_LINES_1.size(),"Wrong number lines in file" + filePath + "!");
+        assertThat(allLines.size()).as("Wrong number lines in file" + filePath + "!").isEqualTo(EXPECTED_SORTED_LINES_1.size());
         assertThat(allLines).as("Wrong order of lines in file" + filePath + "!").isEqualTo(EXPECTED_SORTED_LINES_1);
         allLines.clear();
         //file #2
         filePath = FileUtils.getFileInFolder(subFilesFolder, "2_");
         allLines = FileUtils.readAllFile(buildTestResultFilePath(subFilesFolder, filePath));
-        Assert.that(allLines.size() == EXPECTED_SORTED_LINES_2.size(),"Wrong number lines in file" + filePath + "!");
+        assertThat(allLines.size()).as("Wrong number lines in file" + filePath + "!").isEqualTo(EXPECTED_SORTED_LINES_2.size());
         assertThat(allLines).as("Wrong order of lines in file" + filePath + "!").isEqualTo(EXPECTED_SORTED_LINES_2);
         allLines.clear();
         //file #3
         filePath = FileUtils.getFileInFolder(subFilesFolder, "3_");
         allLines = FileUtils.readAllFile(buildTestResultFilePath(subFilesFolder, filePath));
-        Assert.that(allLines.size() == EXPECTED_SORTED_LINES_3.size(),"Wrong number lines in file" + filePath + "!");
+        assertThat(allLines.size()).as("Wrong number lines in file" + filePath + "!").isEqualTo(EXPECTED_SORTED_LINES_3.size());
         assertThat(allLines).as("Wrong order of lines in file" + filePath + "!").isEqualTo(EXPECTED_SORTED_LINES_3);
         allLines.clear();
 
@@ -99,7 +98,7 @@ public class Tests {
         String filePath = FileUtils.getFileInFolder(subFilesFolder, "1_");
         //file #1
         List<String> allLines = FileUtils.readAllFile(buildTestResultFilePath(subFilesFolder, filePath));
-        Assert.that(allLines.size() == EXPECTED_SORTED_LINES_1.size(),"Wrong number lines in file" + filePath + "!");
+        assertThat(allLines.size()).as("Wrong number lines in file" + filePath + "!").isEqualTo(EXPECTED_SORTED_LINES_1.size());
         assertThat(allLines).as("Wrong order of lines in file" + filePath + "!").isEqualTo(EXPECTED_SORTED_LINES_1);
     }
 
@@ -127,7 +126,7 @@ public class Tests {
         String resultFilePath = filesMerger.mergeFiles();
         workingFolders.add(filesMerger.getResultFolderPath());
         List<String> allLines = FileUtils.readAllFile(resultFilePath);
-        Assert.that(allLines.size() == 6,"Wrong number lines in file" + resultFilePath + "!");
+        assertThat(allLines.size()).as("Wrong number lines in file" + resultFilePath + "!").isEqualTo(6);
         assertThat(allLines).as("Wrong order of lines in file" + resultFilePath + "!").isEqualTo(EXPECTED_MERGED_LINES);
     }
 
@@ -146,8 +145,8 @@ public class Tests {
     }
 
     private String buildTestResultFilePath(String folderPath, String filePath) {
-        return TEST_FOLDER_WITH_RESULTS + FileUtils.getFolderNameFromPath(folderPath)
+        return TEST_FOLDER_WITH_RESULTS + FileUtils.getObjectName(folderPath)
                                         + System.getProperty("file.separator")
-                                        + FileUtils.getFileNameWithExtensionFromPath(filePath);
+                                        + FileUtils.getObjectName(filePath);
     }
 }

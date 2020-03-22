@@ -1,5 +1,7 @@
 package com.griddynamics.task1;
 
+import org.apache.commons.io.FilenameUtils;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -14,12 +16,8 @@ public class FileUtils {
         return filePath.split("\\.")[0];
     }
 
-    public static String getFileNameWithExtensionFromPath(String filePath) {
-        return Paths.get(filePath).getFileName().toString();
-    }
-
-    public static String getFolderNameFromPath(String folderPath) {
-        return folderPath.substring(folderPath.lastIndexOf(System.getProperty("file.separator"))+1);
+    public static String getObjectName(String pathToSmth) {
+        return FilenameUtils.getName(pathToSmth);
     }
 
     public static String getFilesExtensionInFolder(String folderPath) throws FilesOperationException {
@@ -29,13 +27,13 @@ public class FileUtils {
                 Optional<Path> firstFilePath = allFilesInFolder.findFirst();
                 if (firstFilePath.isPresent()) {
                     String filePath = firstFilePath.get().toString();
-                    extension = filePath.substring(filePath.lastIndexOf("."));
+                    extension = FilenameUtils.getExtension(filePath);
                 }
             } catch (IOException e) {
                 throw new FilesOperationException("Error during getting file extension in folder " + folderPath, e.getCause());
             }
         }
-        return extension;
+        return "." + extension;
     }
 
     public static long getFileSize(Path filePath) throws FilesOperationException {
@@ -111,7 +109,7 @@ public class FileUtils {
             try (Stream<Path> allFilesInFolder = Files.list(Paths.get(folderPath))) {
                 filesCount = allFilesInFolder.count();
             } catch (IOException e) {
-                throw new FilesOperationException("Error during getting file extension in folder " + folderPath, e.getCause());
+                throw new FilesOperationException("Error during getting files count in folder " + folderPath, e.getCause());
             }
         }
         return filesCount;
@@ -127,7 +125,7 @@ public class FileUtils {
                     pathToFile = foundFile.toString();
                 }
             } catch (IOException e) {
-                throw new FilesOperationException("Error during getting file extension in folder " + folderPath, e.getCause());
+                throw new FilesOperationException("Error during getting file " + fileNamePart + " from folder " + folderPath, e.getCause());
             }
         }
         return pathToFile.replaceAll("]", "");

@@ -8,15 +8,22 @@ public class Main {
     public static final String SOURCE_FILE_PATH_SPLIT_BY_MEMORY_SIZE = "Source_2mb.txt";
     public static final String SOURCE_FILE_PATH_SPLIT_BY_LINES_COUNT = "SourceFixed.txt";
     public static final int ALLOWED_MAX_LINES_COUNT_TO_READ = 4;
+    public static final String OPTION_SPLIT_BY_LINES = "-l";
+    public static final String OPTION_SPLIT_BY_MEMORY = "-m";
 
-    private static final Logger LOGGER = LogManager.getLogger(SubFilesCreator.class);
+    private static final Logger LOGGER = LogManager.getLogger(Main.class);
 
 
     public static void main(String[] args) {
         try {
-            runWithSplitByLinesCount();
-            //or
-            //runWithSplitByMemorySize();
+            String option = args.length > 0 ? args[0] : OPTION_SPLIT_BY_LINES;
+            switch(option) {
+                case OPTION_SPLIT_BY_LINES:
+                    runWithSplitByLinesCount();
+                    break;
+                default:
+                    runWithSplitByMemorySize();
+                }
         } catch (FilesOperationException e) {
             LOGGER.error("There is an error during application execution: " + e.getMessage());
             if(e.getCause() != null) {

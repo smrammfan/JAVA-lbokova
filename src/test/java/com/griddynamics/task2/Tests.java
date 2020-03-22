@@ -2,9 +2,10 @@ package com.griddynamics.task2;
 
 import org.junit.Before;
 import org.junit.Test;
-import sun.jvm.hotspot.utilities.Assert;
 
 import java.util.*;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 public class Tests {
@@ -47,98 +48,98 @@ public class Tests {
     @Test
     public void canRun1TaskAt1ThreadWithoutDelay() throws InterruptedException {
         MyThreadPool threadPool = runTasksInThreadsWithDefaultMaxQueueSize(listWithOneTask, TASK_DELAY_ZERO, THREADS_COUNT_ONE);
-        Assert.that(threadPool.getCountExecutedTasks() == 1,"Not all tasks were executed");
+        assertThat(threadPool.getCountExecutedTasks()).as("Not all tasks were executed").isEqualTo(1);
     }
 
     //can run 1 task at 1 thread with positive delay
     @Test
     public void canRun1TaskAt1ThreadWithPositiveDelay() throws InterruptedException {
         MyThreadPool threadPool = runTasksInThreadsWithDefaultMaxQueueSize(listWithOneTask, TASK_DELAY_1000, THREADS_COUNT_ONE);
-        Assert.that(threadPool.getCountExecutedTasks() == 1,"Not all tasks were executed");
+       assertThat(threadPool.getCountExecutedTasks()).as("Not all tasks were executed").isEqualTo(1);
     }
 
     //can run 5 tasks at 1 thread without delay
     @Test
     public void canRun5TasksAt1ThreadWithoutDelay() throws InterruptedException {
         MyThreadPool threadPool = runTasksInThreadsWithDefaultMaxQueueSize(listWith5Tasks, TASK_DELAY_ZERO, THREADS_COUNT_ONE);
-        Assert.that(threadPool.getCountExecutedTasks() == 5,"Not all tasks were executed");
+        assertThat(threadPool.getCountExecutedTasks()).as("Not all tasks were executed").isEqualTo(5);
     }
 
     //can run 5 tasks at 1 thread with positive delay
     @Test
     public void canRun5TasksAt1ThreadWithPositiveDelay() throws InterruptedException {
         MyThreadPool threadPool = runTasksInThreadsWithDefaultMaxQueueSize(listWith5Tasks, TASK_DELAY_1000, THREADS_COUNT_ONE);
-        Assert.that(threadPool.getCountExecutedTasks() == 5,"Not all tasks were executed");
+        assertThat(threadPool.getCountExecutedTasks()).as("Not all tasks were executed").isEqualTo(5);
     }
 
     //can run 4 tasks at 5 threads without delay
     @Test
     public void canRun4TasksAt5ThreadsWithoutDelay() throws InterruptedException {
         MyThreadPool threadPool = runTasksInThreadsWithDefaultMaxQueueSize(listWith4Tasks, TASK_DELAY_ZERO, THREADS_COUNT_FIVE);
-        Assert.that(threadPool.getCountExecutedTasks() == 4,"Not all tasks were executed");
+        assertThat(threadPool.getCountExecutedTasks()).as("Not all tasks were executed").isEqualTo(4);
     }
 
     //can run 4 tasks at 5 threads with positive delay
     @Test
     public void canRun4TasksAt5ThreadsWithPositiveDelay() throws InterruptedException {
         MyThreadPool threadPool = runTasksInThreadsWithDefaultMaxQueueSize(listWith4Tasks, TASK_DELAY_1000, THREADS_COUNT_FIVE);
-        Assert.that(threadPool.getCountExecutedTasks() == 4,"Not all tasks were executed");
+        assertThat(threadPool.getCountExecutedTasks()).as("Not all tasks were executed").isEqualTo(4);
     }
 
     //can run 7 tasks at 5 threads without delay
     @Test
     public void canRun7TasksAt5ThreadsWithoutDelay() throws InterruptedException {
         MyThreadPool threadPool = runTasksInThreadsWithDefaultMaxQueueSize(listWith7Tasks, TASK_DELAY_ZERO, THREADS_COUNT_FIVE);
-        Assert.that(threadPool.getCountExecutedTasks() == 7,"Not all tasks were executed");
+        assertThat(threadPool.getCountExecutedTasks()).as("Not all tasks were executed").isEqualTo(7);
     }
 
     //can run 7 tasks at 5 threads with positive delay
     @Test
     public void canRun7TasksAt5ThreadsWithPositiveDelay() throws InterruptedException {
         MyThreadPool threadPool = runTasksInThreadsWithDefaultMaxQueueSize(listWith7Tasks, TASK_DELAY_1000, THREADS_COUNT_FIVE);
-        Assert.that(threadPool.getCountExecutedTasks() == 7,"Not all tasks were executed");
+        assertThat(threadPool.getCountExecutedTasks()).as("Not all tasks were executed").isEqualTo(7);
     }
 
     //can run tasks with empty task name
     @Test
     public void canRunTaskWithEmptyTaskName() throws InterruptedException {
         MyThreadPool threadPool = runTasksInThreadsWithDefaultMaxQueueSize(listWithOneTaskWithEmptyName, TASK_DELAY_1000, THREADS_COUNT_ONE);
-        Assert.that(threadPool.getCountExecutedTasks() == 1,"Not all tasks were executed");
+        assertThat(threadPool.getCountExecutedTasks()).as("Not all tasks were executed").isEqualTo(1);
     }
 
     //can run tasks with positive numbers in task name
     @Test
     public void canRunTaskWithPositiveNumbersInTaskName() throws InterruptedException {
         MyThreadPool threadPool = runTasksInThreadsWithDefaultMaxQueueSize(listWithOneTaskWithPositiveNumInName, TASK_DELAY_1000, THREADS_COUNT_ONE);
-        Assert.that(threadPool.getCountExecutedTasks() == 1,"Not all tasks were executed");
+        assertThat(threadPool.getCountExecutedTasks()).as("Not all tasks were executed").isEqualTo(1);
     }
 
     //can run tasks with negative number in task name
     @Test
     public void canRunTaskWithNegativeNumbersInTaskName() throws InterruptedException {
         MyThreadPool threadPool = runTasksInThreadsWithDefaultMaxQueueSize(listWithOneTaskWithNegativeNumInName, TASK_DELAY_1000, THREADS_COUNT_ONE);
-        Assert.that(threadPool.getCountExecutedTasks() == 1,"Not all tasks were executed");
+        assertThat(threadPool.getCountExecutedTasks()).as("Not all tasks were executed").isEqualTo(1);
     }
 
     //can run tasks with symbols in name
     @Test
     public void canRunTaskWithSymbolsInTaskName() throws InterruptedException {
         MyThreadPool threadPool = runTasksInThreadsWithDefaultMaxQueueSize(listWithOneTaskWithSymbolsInName, TASK_DELAY_1000, THREADS_COUNT_ONE);
-        Assert.that(threadPool.getCountExecutedTasks() == 1,"Not all tasks were executed");
+        assertThat(threadPool.getCountExecutedTasks()).as("Not all tasks were executed").isEqualTo(1);
     }
 
     //can run tasks with queue size more then count of tasks
     @Test
     public void canRunTasksWithQueueSizeMoreThenTasksCount() throws InterruptedException {
         MyThreadPool threadPool = runTasksInThreadsWithSpecifiedMaxQueueSize(listWithOneTask, TASK_DELAY_ZERO, MAX_QUEUE_SIZE_TWO, THREADS_COUNT_ONE);
-        Assert.that(threadPool.getCountExecutedTasks() == 1,"Not all tasks were executed");
+        assertThat(threadPool.getCountExecutedTasks()).as("Not all tasks were executed").isEqualTo(1);
     }
 
     //can run tasks with queue size less then count of tasks
     @Test
     public void canRunTasksWithQueueSizeLessThenTasksCount() throws InterruptedException {
         MyThreadPool threadPool = runTasksInThreadsWithSpecifiedMaxQueueSize(listWith4Tasks, TASK_DELAY_ZERO, MAX_QUEUE_SIZE_TWO, THREADS_COUNT_FIVE);
-        Assert.that(threadPool.getCountExecutedTasks() == 4,"Not all tasks were executed");
+        assertThat(threadPool.getCountExecutedTasks()).as("Not all tasks were executed").isEqualTo(4);
     }
 
     //can run with shutdown before tasks completion when tasks < threads and shutdown on task < threds count
@@ -146,7 +147,7 @@ public class Tests {
     public void canRunWithShutdownBeforeTasksCompletionWhenTasksLessThenThreadsAndShutdownMoreThreads() throws InterruptedException, ThreadPoolException {
         int taskNumToSutdown = TASK_NUMBER_TO_SHUTDOWN_3;
         MyThreadPool threadPool = Main.runTasksInThreadPoolWithShutdownBeforeTasksCompletion(MAX_QUEUE_SIZE_TWO, THREADS_COUNT_FIVE, TASKS_COUNT_4, TASK_DELAY_ZERO, taskNumToSutdown);
-        Assert.that(threadPool.getCountExecutedTasks() == taskNumToSutdown-1,"Not all tasks were executed");
+        assertThat(threadPool.getCountExecutedTasks()).as("Not all tasks were executed").isEqualTo(taskNumToSutdown-1);
     }
 
     //can run with shutdown before tasks completion when tasks > threads and shutdown on task > threds count
@@ -154,7 +155,7 @@ public class Tests {
     public void canRunWithShutdownBeforeTasksCompletionWhenTasksMoreThenThreads() throws InterruptedException, ThreadPoolException {
         int taskNumToSutdown = TASK_NUMBER_TO_SHUTDOWN_7;
         MyThreadPool threadPool = Main.runTasksInThreadPoolWithShutdownBeforeTasksCompletion(MAX_QUEUE_SIZE_TWO, THREADS_COUNT_FIVE, TASKS_COUNT_7, TASK_DELAY_ZERO, taskNumToSutdown);
-        Assert.that(threadPool.getCountExecutedTasks() == taskNumToSutdown-1,"Not all tasks were executed");
+        assertThat(threadPool.getCountExecutedTasks()).as("Not all tasks were executed").isEqualTo(taskNumToSutdown-1);
     }
 
     //can run with shutdown before tasks completion when tasks < threads and shutdown on task < threds count
@@ -162,7 +163,7 @@ public class Tests {
     public void canRunWithShutdownBeforeTasksCompletionWhenTasksLessThenThreadsAndShutdownLessThreads() throws InterruptedException, ThreadPoolException {
         int taskNumToSutdown = TASK_NUMBER_TO_SHUTDOWN_3;
         MyThreadPool threadPool = Main.runTasksInThreadPoolWithShutdownBeforeTasksCompletion(MAX_QUEUE_SIZE_TWO, THREADS_COUNT_FIVE, TASKS_COUNT_4, TASK_DELAY_ZERO, taskNumToSutdown);
-        Assert.that(threadPool.getCountExecutedTasks() == taskNumToSutdown-1,"Not all tasks were executed");
+        assertThat(threadPool.getCountExecutedTasks()).as("Not all tasks were executed").isEqualTo(taskNumToSutdown-1);
     }
 
     //can run with shutdown before tasks completion when tasks > threads and shutdown on task > threds count
@@ -170,21 +171,21 @@ public class Tests {
     public void canRunWithShutdownBeforeTasksCompletionWhenTasksMoreThenThreadsAndShutdownMoreThreads() throws InterruptedException, ThreadPoolException {
         int taskNumToSutdown = TASK_NUMBER_TO_SHUTDOWN_7;
         MyThreadPool threadPool = Main.runTasksInThreadPoolWithShutdownBeforeTasksCompletion(MAX_QUEUE_SIZE_TWO, THREADS_COUNT_FIVE, TASKS_COUNT_7, TASK_DELAY_ZERO, taskNumToSutdown);
-        Assert.that(threadPool.getCountExecutedTasks() == taskNumToSutdown-1,"Not all tasks were executed");
+        assertThat(threadPool.getCountExecutedTasks()).as("Not all tasks were executed").isEqualTo(taskNumToSutdown-1);
     }
 
     //can run with shutdown after tasks completion when tasks < threads
     @Test
     public void canRunWithShutdownAfterTasksCompletionWhenTasksLessThenThreads() throws InterruptedException {
         MyThreadPool threadPool = Main.runTasksInThreadPoolWithShutdownAfterTasksCompletion(MAX_QUEUE_SIZE_TWO, THREADS_COUNT_FIVE, TASKS_COUNT_4, TASK_DELAY_ZERO);
-        Assert.that(threadPool.getCountExecutedTasks() == TASKS_COUNT_4,"Not all tasks were executed");
+        assertThat(threadPool.getCountExecutedTasks()).as("Not all tasks were executed").isEqualTo(TASKS_COUNT_4);
     }
 
     //can run with shutdown after tasks completion when tasks > threads
     @Test
     public void canRunWithShutdownAfterTasksCompletionWhenTasksMoreThenThreads() throws InterruptedException {
         MyThreadPool threadPool = Main.runTasksInThreadPoolWithShutdownAfterTasksCompletion(MAX_QUEUE_SIZE_TWO, THREADS_COUNT_FIVE, TASKS_COUNT_7, TASK_DELAY_ZERO);
-        Assert.that(threadPool.getCountExecutedTasks() == TASKS_COUNT_7,"Not all tasks were executed");
+        assertThat(threadPool.getCountExecutedTasks()).as("Not all tasks were executed").isEqualTo(TASKS_COUNT_7);
     }
 
     //---Negative tests

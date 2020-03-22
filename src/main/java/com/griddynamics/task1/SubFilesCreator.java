@@ -97,7 +97,7 @@ public class SubFilesCreator {
 
      private String buildPathToSubFile(int subFileNumber) {
         return this.resultsFolderPath + System.getProperty("file.separator") + subFileNumber + "_"
-                                        + FileUtils.getFileNameWithExtensionFromPath(this.sourceFilePath);
+                                        + FileUtils.getObjectName(this.sourceFilePath);
      }
 
      private String buildFolderPathForSubFiles() {

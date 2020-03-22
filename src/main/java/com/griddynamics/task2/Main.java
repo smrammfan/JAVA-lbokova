@@ -10,12 +10,18 @@ public class Main {
     public static final int TASK_DELAY = 1000;
     public static final int TASK_NUMBER_TO_SHUTDOWN = 3;//2
     public static final int FOREVER = 0;
+    public static final String OPTION_SHUTDOWN_AFTER_TASKS_COMPLETION = "-a";
+    public static final String OPTION_SHUTDOWN_BEFORE_TASKS_COMPLETION = "-b";
 
     public static void main(String[] args) throws InterruptedException, IllegalArgumentException, ThreadPoolException {
-        runTasksInThreadPoolWithShutdownAfterTasksCompletion(TASKS_QUEUE_MAX_SIZE, THREADS_COUNT, TASKS_COUNT, TASK_DELAY);
-
-        //or
-        //runTasksInThreadPoolWithShutdownBeforeTasksCompletion(TASKS_QUEUE_MAX_SIZE, THREADS_COUNT, TASKS_COUNT, TASK_DELAY, TASK_NUMBER_TO_SHUTDOWN);
+        String option = args.length > 0 ? args[0] : OPTION_SHUTDOWN_AFTER_TASKS_COMPLETION;
+        switch(option) {
+            case OPTION_SHUTDOWN_AFTER_TASKS_COMPLETION:
+                runTasksInThreadPoolWithShutdownAfterTasksCompletion(TASKS_QUEUE_MAX_SIZE, THREADS_COUNT, TASKS_COUNT, TASK_DELAY);
+                break;
+            default:
+                runTasksInThreadPoolWithShutdownBeforeTasksCompletion(TASKS_QUEUE_MAX_SIZE, THREADS_COUNT, TASKS_COUNT, TASK_DELAY, TASK_NUMBER_TO_SHUTDOWN);
+        }
     }
 
     public static MyThreadPool runTasksInThreadPoolWithShutdownAfterTasksCompletion(int tasksQueueMaxSize, int threadsCount,

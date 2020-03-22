@@ -91,7 +91,7 @@ public class FilesMerger {
     }
 
     private String getResultFileName() {
-        return FileUtils.getFolderNameFromPath(this.inputFilesFolderPath);
+       return FileUtils.getObjectName(this.inputFilesFolderPath);
     }
 
     private String getResultFilePath() throws FilesOperationException {
