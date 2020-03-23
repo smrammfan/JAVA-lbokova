@@ -63,6 +63,7 @@ public class SubFilesCreator {
                 LOGGER.info("Currently loaded size: " + calculatedCurrentSizeLoaded);
             }
             if(!linesWriteToSubFile.isEmpty()) {
+                linesWriteToSubFile.sort(String::compareTo);
                 writeLinesToSubFile(currentSubFileNumber,linesWriteToSubFile);
                 linesWriteToSubFile.clear();
             }

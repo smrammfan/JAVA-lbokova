@@ -18,14 +18,17 @@ public class FilesMerger {
     private String resultFilePath;
     private String tmpResultFilePath;
     private String inputFilesFolderPath;
+    private String prefixForMergedFolder;
     private static final Logger LOGGER = LogManager.getLogger(SubFilesCreator.class);
 
     public FilesMerger(String inputFilesFolderPath) {
         this.inputFilesFolderPath = inputFilesFolderPath;
+        this.prefixForMergedFolder = this.inputFilesFolderPath + "_";
         this.resultFolderPath = inputFilesFolderPath + "_Merged";
     }
 
     public String mergeSort() throws FilesOperationException {
+        FileUtils.removeAllSimilarFoldersAndSubFiles(this.prefixForMergedFolder);
         FileUtils.removeAllFilesFromFolderIfFolderExists(getResultFolderPath());
         FileUtils.createFolderForSubFilesIfNotExists(getResultFolderPath());
         LOGGER.info("Free memory: " + MemoryUtils.getFreeMemorySize());
@@ -42,7 +45,7 @@ public class FilesMerger {
             FileUtils.copyFile(filesToMerge.get(0),new File(getResultFilePath()));
             return;
         }
-        setTmpResultFolderPath(inputFolderPath + num);
+        setTmpResultFolderPath(inputFolderPath + "_" + num);
         FileUtils.createFolderForSubFilesIfNotExists(getTmpResultFolderPath());
 
         for(int i=0; i+1<filesToMerge.size(); i=+2) {

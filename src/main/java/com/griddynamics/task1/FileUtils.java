@@ -118,6 +118,22 @@ public class FileUtils {
         }
     }
 
+    public static void removeAllSimilarFoldersAndSubFiles(String folderPath) throws FilesOperationException {
+        if(Files.isDirectory(Paths.get(folderPath))) {
+            File folder = new File(folderPath);
+            String parentFolderPath = folder.getParent();
+            try (Stream<Path> allFilesInFolder = Files.list(Paths.get(parentFolderPath))) {
+                Set<Path> foundFolder = allFilesInFolder.filter(path -> path.getFileName().toString().contains(folder.getName()))
+                        .collect(Collectors.toSet());
+                if(!foundFolder.isEmpty()) {
+                    removeFolderAndSubFiles(foundFolder.toString());
+                }
+            } catch (IOException e) {
+                throw new FilesOperationException("Error during getting file " + folderPath + " from folder " + folderPath, e.getCause());
+            }
+        }
+    }
+
     public static long getFilesCountInFolder(String folderPath) throws FilesOperationException {
         long filesCount = 0;
         if(Files.isDirectory(Paths.get(folderPath))) {

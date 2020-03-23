@@ -19,9 +19,11 @@ public class Tests {
     private static final List<String> EXPECTED_SORTED_LINES_2 = new ArrayList<>(Arrays.asList("179393", "648156", "872412", "913859"));
     private static final List<String> EXPECTED_SORTED_LINES_3 = new ArrayList<>(Arrays.asList("224628", "411100"));
     private static final List<String> EXPECTED_MERGED_LINES = new ArrayList<>(Arrays.asList("222379", "610645", "620630", "648156", "872412", "913859"));
+    private static final List<String> EXPECTED_MERGED_LINES_3 = new ArrayList<>(Arrays.asList("222379", "224628", "411100", "610645", "620630", "648156", "872412", "913859"));
     private static final String TEST_FOLDER_WITH_RESULTS = "target/test-classes/";
     private static final String TEST_FILE1_NAME = "Test1.txt";
     private static final String TEST_FILE2_FOLDER_NAME = "Test2";
+    private static final String TEST_FILE3_FOLDER_NAME = "Test3";
     private static final String FAKE_FILE_NAME = "fakeFile.txt";
     private static final String FAKE_FOLDER_NAME = "fakeFolder";
 
@@ -130,6 +132,16 @@ public class Tests {
         assertThat(allLines).as("Wrong order of lines in file" + resultFilePath + "!").isEqualTo(EXPECTED_MERGED_LINES);
     }
 
+    @Test
+    public void checkThatFilesMergeCorrectlyMergeThreeFiles() throws FilesOperationException {
+        String testSubFilesFolderPath = this.getClass().getClassLoader().getResource(TEST_FILE3_FOLDER_NAME).getPath();
+        FilesMerger filesMerger = new FilesMerger(testSubFilesFolderPath);
+        String resultFilePath = filesMerger.mergeSort();
+        workingFolders.add(filesMerger.getResultFolderPath());
+        List<String> allLines = FileUtils.readAllFile(resultFilePath);
+        assertThat(allLines.size()).as("Wrong number lines in file" + resultFilePath + "!").isEqualTo(8);
+        assertThat(allLines).as("Wrong order of lines in file" + resultFilePath + "!").isEqualTo(EXPECTED_MERGED_LINES_3);
+    }
 
 
     @After
