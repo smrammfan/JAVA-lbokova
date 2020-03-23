@@ -5,18 +5,18 @@ import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
-import java.util.stream.Stream;
 
 public class FilesMerger {
 
     private String resultFolderPath;
     private String resultFilePath;
+    private String tmpResultFilePath;
     private String inputFilesFolderPath;
     private static final Logger LOGGER = LogManager.getLogger(SubFilesCreator.class);
 
@@ -25,59 +25,81 @@ public class FilesMerger {
         this.resultFolderPath = inputFilesFolderPath + "_Merged";
     }
 
-    public String mergeFiles() throws FilesOperationException {
+    public String mergeSort() throws FilesOperationException {
         FileUtils.removeAllFilesFromFolderIfFolderExists(getResultFolderPath());
         FileUtils.createFolderForSubFilesIfNotExists(getResultFolderPath());
         LOGGER.info("Free memory: " + MemoryUtils.getFreeMemorySize());
+        mergeFilesInFolder(this.inputFilesFolderPath, 1);
+        return getResultFilePath();
+    }
 
-        Map<BufferedReader,String> readersWithLines = new HashMap<>();
-        try(Stream<Path> filesToMerge = Files.list(Paths.get(this.inputFilesFolderPath))) {
-            filesToMerge.forEach(path -> {
-                try {
-                    BufferedReader reader = Files.newBufferedReader(path);
-                    String line = reader.readLine();
-                    if(line != null) {
-                        readersWithLines.put(reader, line);
-                    }
-                } catch (IOException e) {
-                    LOGGER.error("Error while reading the first line from file " + path);
-                    e.printStackTrace();
-                }
-
-            });
-        } catch (IOException e) {
-            throw new FilesOperationException("Error while reading files to merge from folder " + this.inputFilesFolderPath, e.getCause());
+    public void mergeFilesInFolder(String inputFolderPath, int num) throws FilesOperationException {
+        if(!Files.isDirectory(Paths.get(inputFolderPath))) {
+            throw new FilesOperationException(inputFolderPath + " isn't directory!");
         }
+        List<File> filesToMerge = (List<File>) org.apache.commons.io.FileUtils.listFiles(new File(inputFolderPath),null, false);
+        if(filesToMerge.size() == 1) {
+            FileUtils.copyFile(filesToMerge.get(0),new File(getResultFilePath()));
+            return;
+        }
+        setTmpResultFolderPath(inputFolderPath + num);
+        FileUtils.createFolderForSubFilesIfNotExists(getTmpResultFolderPath());
 
-        Set<BufferedReader> allReaders = readersWithLines.keySet();
+        for(int i=0; i+1<filesToMerge.size(); i=+2) {
+            File file1 = filesToMerge.get(i);
+            File file2 = filesToMerge.get(i+1);
+            mergeFilesPairs(file1, file2);
+        }
+        if(filesToMerge.size() % 2 != 0) {
+            File lastFile = filesToMerge.get(filesToMerge.size()-1);
+            FileUtils.copyFile(lastFile,new File(getTmpResultFilePath(lastFile.getName())));
+        }
+        mergeFilesInFolder(getTmpResultFolderPath(), ++num);
+    }
 
-        String minLine = "";
-        try(BufferedWriter writer = Files.newBufferedWriter(Paths.get(getResultFilePath())
-                , StandardOpenOption.WRITE, StandardOpenOption.APPEND, StandardOpenOption.CREATE)) {
-            while(!readersWithLines.isEmpty()) {
-                minLine = getMinLine(readersWithLines.values());
-                FileUtils.writeLineToFile(writer, minLine);
-                readNewLineFromFile(readersWithLines, minLine);
+    private void mergeFilesPairs(File file1, File file2) throws FilesOperationException {
+        String resultFile = getTmpResultFilePath(file1.getName());
+        try(BufferedReader reader1 = Files.newBufferedReader(file1.toPath());
+            BufferedReader reader2 = Files.newBufferedReader(file2.toPath());
+            BufferedWriter writer = Files.newBufferedWriter(Paths.get(resultFile)
+                    , StandardOpenOption.CREATE, StandardOpenOption.WRITE)) {
+
+            String line1 = reader1.readLine();
+            String line2 = reader2.readLine();
+
+            while(true) {
+                if (line1 == null) {
+                    FileUtils.writeLineToFile(writer, line2);
+                    FileUtils.writeRemainingLinesToFile(writer,reader2);
+                    break;
+                } else if (line2 == null) {
+                    FileUtils.writeLineToFile(writer, line1);
+                    FileUtils.writeRemainingLinesToFile(writer,reader1);
+                    break;
+                } else if (line1.compareTo(line2) <= 0) {
+                    FileUtils.writeLineToFile(writer, line1);
+                    line1 = reader1.readLine();
+                } else {
+                    FileUtils.writeLineToFile(writer, line2);
+                    line2 = reader2.readLine();
+                }
             }
 
         } catch (IOException e) {
             throw new FilesOperationException("Error while writing to result file " + getResultFolderPath(), e.getCause());
-        } finally {
-            for (BufferedReader reader : allReaders) {
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                    LOGGER.error("Error while closing reader");
-                    e.printStackTrace();
-                }
-            }
         }
-        return getResultFilePath();
-
     }
 
     public String getResultFolderPath() {
         return this.resultFolderPath;
+    }
+
+    public String getTmpResultFolderPath() {
+        return this.tmpResultFilePath;
+    }
+
+    public void setTmpResultFolderPath(String path) {
+        this.tmpResultFilePath = path;
     }
 
     private String getMinLine(Collection<String> lines) {
@@ -97,6 +119,10 @@ public class FilesMerger {
     private String getResultFilePath() throws FilesOperationException {
         return (this.resultFilePath == null) ? getResultFolderPath() + System.getProperty("file.separator") + getResultFileName()
                 + FileUtils.getFilesExtensionInFolder(this.inputFilesFolderPath) : this.resultFilePath;
+    }
+
+    private String getTmpResultFilePath(String fileName) throws FilesOperationException {
+        return getTmpResultFolderPath() + System.getProperty("file.separator") + fileName;
     }
 
     private BufferedReader getNeededReader(Map<BufferedReader, String> filesWithLines, String lastWrittenLine) {

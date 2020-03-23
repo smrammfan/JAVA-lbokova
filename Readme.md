@@ -42,6 +42,7 @@ Options for Task 1:
 Options for Task 2:
 -------------------
 `-a` which means to run app with shutdown threadpool after tasks completion
+
 `-b` which means to run app with shutdown threadpool before tasks completion
 
 ### Example of command for execution:

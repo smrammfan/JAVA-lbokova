@@ -108,7 +108,7 @@ public class Tests {
     public void filesMergerShouldThrowExceptionIfFolderNotFound() throws FilesOperationException {
         FilesMerger filesMerger = new FilesMerger(FAKE_FOLDER_NAME);
         workingFolders.add(FAKE_FOLDER_NAME);
-        filesMerger.mergeFiles();
+        filesMerger.mergeSort();
     }
 
 
@@ -116,14 +116,14 @@ public class Tests {
     public void filesMergerShouldThrowExceptionIfInputParamNotFolder() throws FilesOperationException {
         FilesMerger filesMerger = new FilesMerger(FAKE_FILE_NAME);
         workingFolders.add(FAKE_FILE_NAME);
-        filesMerger.mergeFiles();
+        filesMerger.mergeSort();
     }
 
     @Test
     public void checkThatFilesMergeCorrectlyMergeTwoFiles() throws FilesOperationException {
         String testSubFilesFolderPath = this.getClass().getClassLoader().getResource(TEST_FILE2_FOLDER_NAME).getPath();
         FilesMerger filesMerger = new FilesMerger(testSubFilesFolderPath);
-        String resultFilePath = filesMerger.mergeFiles();
+        String resultFilePath = filesMerger.mergeSort();
         workingFolders.add(filesMerger.getResultFolderPath());
         List<String> allLines = FileUtils.readAllFile(resultFilePath);
         assertThat(allLines.size()).as("Wrong number lines in file" + resultFilePath + "!").isEqualTo(6);

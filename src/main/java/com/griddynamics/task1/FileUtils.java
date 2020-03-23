@@ -4,6 +4,7 @@ import org.apache.commons.io.FilenameUtils;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.*;
@@ -57,8 +58,22 @@ public class FileUtils {
 
     public static void writeLineToFile(BufferedWriter writer, String lineToWrite) throws FilesOperationException {
         try {
-            writer.write(lineToWrite);
-            writer.newLine();
+            if(lineToWrite != null) {
+                writer.write(lineToWrite);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            throw new FilesOperationException("Error during write to file", e.getCause());
+        }
+    }
+
+    public static void writeRemainingLinesToFile(BufferedWriter writer, BufferedReader reader) throws FilesOperationException {
+        try {
+            String lineToWrite;
+            while((lineToWrite = reader.readLine()) != null){
+                writer.write(lineToWrite);
+                writer.newLine();
+            }
         } catch (IOException e) {
             throw new FilesOperationException("Error during write to file", e.getCause());
         }
@@ -146,5 +161,13 @@ public class FileUtils {
 
     public static boolean checkPathExists(String filePath) throws FilesOperationException {
         return Files.exists(Paths.get(filePath));
+    }
+
+    public static void copyFile(File file, File destFile) throws FilesOperationException {
+        try {
+            org.apache.commons.io.FileUtils.copyFile(file,destFile);
+        } catch (IOException e) {
+            throw new FilesOperationException("Error during copying file " + file.toString() + " to " + destFile.toString(), e.getCause());
+        }
     }
 }

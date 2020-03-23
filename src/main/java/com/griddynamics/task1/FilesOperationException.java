@@ -6,5 +6,9 @@ public class FilesOperationException extends Exception {
         super(message, cause);
     }
 
+    public FilesOperationException(String message) {
+        super(message);
+    }
+
 
 }

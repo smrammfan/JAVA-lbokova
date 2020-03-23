@@ -44,7 +44,7 @@ public class Main {
     public static void run(SubFilesCreator subFilesCreator) throws FilesOperationException {
         String subFilesFolderPath = subFilesCreator.createSortedSubFiles();
         FilesMerger filesMerger = new FilesMerger(subFilesFolderPath);
-        filesMerger.mergeFiles();
+        filesMerger.mergeSort();
     }
 
 
