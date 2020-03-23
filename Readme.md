@@ -37,7 +37,7 @@ Options for Task 1:
 `-m` which means to run app with split big file by available memory size limit
 
 ### Example of command for execution:
-`mvn exec:java -Dexec.mainClass="com.griddynamics.task1.Main" -Dexec.args="-l`
+`mvn exec:java -Dexec.mainClass="com.griddynamics.task1.Main" -Dexec.args="-l"`
 
 Options for Task 2:
 -------------------
