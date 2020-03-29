@@ -32,7 +32,7 @@ Each main method contains two options to run application in two different ways.
 
 Options for Task 1:
 -------------------
-`-l` which means to run app with split big file by lines number limit
+`-l` which means to run app with split big file by lines number limit (selected by default if there is no any option specified)
 
 `-m` which means to run app with split big file by available memory size limit
 
@@ -41,7 +41,7 @@ Options for Task 1:
 
 Options for Task 2:
 -------------------
-`-a` which means to run app with shutdown threadpool after tasks completion
+`-a` which means to run app with shutdown threadpool after tasks completion (selected by default if there is no any option specified)
 
 `-b` which means to run app with shutdown threadpool before tasks completion
 

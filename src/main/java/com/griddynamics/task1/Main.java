@@ -3,10 +3,14 @@ package com.griddynamics.task1;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 public class Main {
 
-    public static final String SOURCE_FILE_PATH_SPLIT_BY_MEMORY_SIZE = "Source_2mb.txt";
-    public static final String SOURCE_FILE_PATH_SPLIT_BY_LINES_COUNT = "SourceFixed.txt";
+    public static final Path SOURCE_FILE_PATH_SPLIT_BY_MEMORY_SIZE = Paths.get("Source_2mb.txt");
+    public static final Path SOURCE_FILE_PATH_SPLIT_BY_LINES_COUNT = Paths.get("SourceFixed.txt");
+    public static final Path RESULT_FILE_PATH = Paths.get("MergedResult.txt");
     public static final int ALLOWED_MAX_LINES_COUNT_TO_READ = 4;
     public static final String OPTION_SPLIT_BY_LINES = "-l";
     public static final String OPTION_SPLIT_BY_MEMORY = "-m";
@@ -17,34 +21,29 @@ public class Main {
     public static void main(String[] args) {
         try {
             String option = args.length > 0 ? args[0] : OPTION_SPLIT_BY_LINES;
-            switch(option) {
+            switch (option) {
                 case OPTION_SPLIT_BY_LINES:
                     runWithSplitByLinesCount();
                     break;
-                default:
+                case OPTION_SPLIT_BY_MEMORY:
                     runWithSplitByMemorySize();
-                }
-        } catch (FilesOperationException e) {
-            LOGGER.error("There is an error during application execution: " + e.getMessage());
-            if(e.getCause() != null) {
-                LOGGER.error("Caused by: " + e.getCause().getStackTrace());
+                    break;
+                default:
+                    LOGGER.error("Unsupported option specified: " + option);
+                    throw new IllegalArgumentException("Unsupported option specified: " + option);
             }
+        } catch (FilesOperationException e) {
+            LOGGER.error("There is an error during application execution: " + e.getMessage(), e);
         }
     }
 
 
     public static void runWithSplitByMemorySize() throws FilesOperationException {
-        run(new SubFilesCreator(SOURCE_FILE_PATH_SPLIT_BY_MEMORY_SIZE));
+        ExternalMergeSort.mergeSort(SOURCE_FILE_PATH_SPLIT_BY_MEMORY_SIZE, -1, RESULT_FILE_PATH);
     }
 
     public static void runWithSplitByLinesCount() throws FilesOperationException {
-        run(new SubFilesCreator(SOURCE_FILE_PATH_SPLIT_BY_LINES_COUNT, ALLOWED_MAX_LINES_COUNT_TO_READ));
-    }
-
-    public static void run(SubFilesCreator subFilesCreator) throws FilesOperationException {
-        String subFilesFolderPath = subFilesCreator.createSortedSubFiles();
-        FilesMerger filesMerger = new FilesMerger(subFilesFolderPath);
-        filesMerger.mergeSort();
+        ExternalMergeSort.mergeSort(SOURCE_FILE_PATH_SPLIT_BY_LINES_COUNT, ALLOWED_MAX_LINES_COUNT_TO_READ, RESULT_FILE_PATH);
     }
 
 

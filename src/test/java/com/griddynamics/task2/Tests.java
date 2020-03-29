@@ -55,7 +55,7 @@ public class Tests {
     @Test
     public void canRun1TaskAt1ThreadWithPositiveDelay() throws InterruptedException {
         MyThreadPool threadPool = runTasksInThreadsWithDefaultMaxQueueSize(listWithOneTask, TASK_DELAY_1000, THREADS_COUNT_ONE);
-       assertThat(threadPool.getCountExecutedTasks()).as("Not all tasks were executed").isEqualTo(1);
+        assertThat(threadPool.getCountExecutedTasks()).as("Not all tasks were executed").isEqualTo(1);
     }
 
     //can run 5 tasks at 1 thread without delay
@@ -147,7 +147,7 @@ public class Tests {
     public void canRunWithShutdownBeforeTasksCompletionWhenTasksLessThenThreadsAndShutdownMoreThreads() throws InterruptedException, ThreadPoolException {
         int taskNumToSutdown = TASK_NUMBER_TO_SHUTDOWN_3;
         MyThreadPool threadPool = Main.runTasksInThreadPoolWithShutdownBeforeTasksCompletion(MAX_QUEUE_SIZE_TWO, THREADS_COUNT_FIVE, TASKS_COUNT_4, TASK_DELAY_ZERO, taskNumToSutdown);
-        assertThat(threadPool.getCountExecutedTasks()).as("Not all tasks were executed").isEqualTo(taskNumToSutdown-1);
+        assertThat(threadPool.getCountExecutedTasks()).as("Not all tasks were executed").isEqualTo(taskNumToSutdown - 1);
     }
 
     //can run with shutdown before tasks completion when tasks > threads and shutdown on task > threds count
@@ -155,7 +155,7 @@ public class Tests {
     public void canRunWithShutdownBeforeTasksCompletionWhenTasksMoreThenThreads() throws InterruptedException, ThreadPoolException {
         int taskNumToSutdown = TASK_NUMBER_TO_SHUTDOWN_7;
         MyThreadPool threadPool = Main.runTasksInThreadPoolWithShutdownBeforeTasksCompletion(MAX_QUEUE_SIZE_TWO, THREADS_COUNT_FIVE, TASKS_COUNT_7, TASK_DELAY_ZERO, taskNumToSutdown);
-        assertThat(threadPool.getCountExecutedTasks()).as("Not all tasks were executed").isEqualTo(taskNumToSutdown-1);
+        assertThat(threadPool.getCountExecutedTasks()).as("Not all tasks were executed").isEqualTo(taskNumToSutdown - 1);
     }
 
     //can run with shutdown before tasks completion when tasks < threads and shutdown on task < threds count
@@ -163,7 +163,7 @@ public class Tests {
     public void canRunWithShutdownBeforeTasksCompletionWhenTasksLessThenThreadsAndShutdownLessThreads() throws InterruptedException, ThreadPoolException {
         int taskNumToSutdown = TASK_NUMBER_TO_SHUTDOWN_3;
         MyThreadPool threadPool = Main.runTasksInThreadPoolWithShutdownBeforeTasksCompletion(MAX_QUEUE_SIZE_TWO, THREADS_COUNT_FIVE, TASKS_COUNT_4, TASK_DELAY_ZERO, taskNumToSutdown);
-        assertThat(threadPool.getCountExecutedTasks()).as("Not all tasks were executed").isEqualTo(taskNumToSutdown-1);
+        assertThat(threadPool.getCountExecutedTasks()).as("Not all tasks were executed").isEqualTo(taskNumToSutdown - 1);
     }
 
     //can run with shutdown before tasks completion when tasks > threads and shutdown on task > threds count
@@ -171,7 +171,7 @@ public class Tests {
     public void canRunWithShutdownBeforeTasksCompletionWhenTasksMoreThenThreadsAndShutdownMoreThreads() throws InterruptedException, ThreadPoolException {
         int taskNumToSutdown = TASK_NUMBER_TO_SHUTDOWN_7;
         MyThreadPool threadPool = Main.runTasksInThreadPoolWithShutdownBeforeTasksCompletion(MAX_QUEUE_SIZE_TWO, THREADS_COUNT_FIVE, TASKS_COUNT_7, TASK_DELAY_ZERO, taskNumToSutdown);
-        assertThat(threadPool.getCountExecutedTasks()).as("Not all tasks were executed").isEqualTo(taskNumToSutdown-1);
+        assertThat(threadPool.getCountExecutedTasks()).as("Not all tasks were executed").isEqualTo(taskNumToSutdown - 1);
     }
 
     //can run with shutdown after tasks completion when tasks < threads
@@ -249,7 +249,7 @@ public class Tests {
     }
 
     private MyThreadPool runTasksInThreadsWithSpecifiedMaxQueueSize(List<Runnable> tasks, Integer taskDelay, int tasksQueueMaxSize,
-                                                                        int threadsCount) throws InterruptedException {
+                                                                    int threadsCount) throws InterruptedException {
         tasks.forEach(task -> tasksWithSpecifiedDelay.put(task, taskDelay));
         return Main.runTasksListInThreadPool(tasksWithSpecifiedDelay, tasksQueueMaxSize, threadsCount);
     }

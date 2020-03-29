@@ -8,7 +8,7 @@ public class SomeTask implements Runnable {
     private String taskName;
 
     public SomeTask(String taskName) {
-        if(taskName == null || taskName.isEmpty()) {
+        if (taskName == null || taskName.isEmpty()) {
             this.taskName = generateTaskName();
         } else {
             this.taskName = taskName;

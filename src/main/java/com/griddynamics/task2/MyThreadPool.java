@@ -5,24 +5,24 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class MyThreadPool {
-    private BlockingQueue <RunnableTask> tasksQueue;
+    private BlockingQueue<RunnableTask> tasksQueue;
     private List<Thread> threads;
     private boolean isShutdown;
     private int tasksSubmittedCount;
 
 
     public MyThreadPool(int tasksQueueMaxSize, int threadsCount) throws IllegalArgumentException {
-        if(tasksQueueMaxSize <1 || threadsCount < 1) {
+        if (tasksQueueMaxSize < 1 || threadsCount < 1) {
             throw new IllegalArgumentException("Queue size and threads count should be more then 0");
         }
         this.tasksQueue = new BlockingQueue<>(tasksQueueMaxSize);
-        this.threads =  new ArrayList<>(threadsCount);
+        this.threads = new ArrayList<>(threadsCount);
         this.isShutdown = false;
         this.tasksSubmittedCount = 0;
         String threadName = null;
         TaskExecutor taskExecutor = null;
         for (int num = 1; num <= threadsCount; num++) {
-            threadName = "Thread-"+num;
+            threadName = "Thread-" + num;
             taskExecutor = new TaskExecutor(tasksQueue);
             Thread thread = new Thread(taskExecutor, threadName);
             threads.add(thread);
@@ -31,14 +31,14 @@ public class MyThreadPool {
     }
 
     public void submit(Runnable task, long delay) throws InterruptedException, ThreadPoolException {
-        if(task == null) {
+        if (task == null) {
             throw new IllegalArgumentException("Task can't be null!");
         }
-        if(delay < 0) {
+        if (delay < 0) {
             throw new IllegalArgumentException("Delay can't be less then zero!");
         }
 
-        if(!isShittedDown()) {
+        if (!isShittedDown()) {
             tasksQueue.addElement(new RunnableTask(task, delay));
             this.tasksSubmittedCount++;
         } else {
@@ -50,10 +50,10 @@ public class MyThreadPool {
         if (!isShittedDown() && (tasksSubmittedCount >= threads.size())) {
             waitTasksCompletionBeforeShutDownWhenMoreTasksThenThreads(timeoutMilis);
             printAllThreadsState();
-        } else if(!isShittedDown() && tasksSubmittedCount < threads.size()) {
+        } else if (!isShittedDown() && tasksSubmittedCount < threads.size()) {
             waitAllThreadsExecuteTheirTask();
             stopAllActiveThreads();
-        } else if(isShittedDown()) {
+        } else if (isShittedDown()) {
             waitAllThreadsBecomeTerminated();
             stopAllActiveThreads();
         }
@@ -68,7 +68,7 @@ public class MyThreadPool {
 
     private void waitAllThreadsBecomeTerminated() {
         int countFinishedThreads = calculateCountOfTerminatedThreads();
-        while (((countFinishedThreads != threads.size() && countFinishedThreads != tasksSubmittedCount) || getCountExecutedTasks() != tasksSubmittedCount) ) {
+        while (((countFinishedThreads != threads.size() && countFinishedThreads != tasksSubmittedCount) || getCountExecutedTasks() != tasksSubmittedCount)) {
             countFinishedThreads = sleepAndCheckCountOFTerminatedThreads(countFinishedThreads);
         }
     }
@@ -116,6 +116,7 @@ public class MyThreadPool {
     private void printThreadState(Thread thread) {
         System.out.println(thread.getName() + " state:" + thread.getState().toString());
     }
+
     private void printAllThreadsState() {
         this.threads.forEach(thread -> printThreadState(thread));
     }

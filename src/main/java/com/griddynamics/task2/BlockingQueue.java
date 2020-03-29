@@ -10,25 +10,25 @@ public class BlockingQueue<Type> {
     private boolean isNeedToStop = false;
     private int tasksExecutedCount = 0;
 
-    public BlockingQueue(int size){
+    public BlockingQueue(int size) {
         this.MAX_ELEMENTS_COUNT = size;
     }
 
-    public synchronized void addElement(Type element) throws InterruptedException  {
-        while(this.queue.size() == this.MAX_ELEMENTS_COUNT) {
+    public synchronized void addElement(Type element) throws InterruptedException {
+        while (this.queue.size() == this.MAX_ELEMENTS_COUNT) {
             wait();
         }
-        if(this.queue.isEmpty()) {
+        if (this.queue.isEmpty()) {
             notifyAll();
         }
         this.queue.offer(element);
     }
 
-    public synchronized Type getHeadElement() throws InterruptedException{
-        while(this.queue.isEmpty() && !needToStop()){
+    public synchronized Type getHeadElement() throws InterruptedException {
+        while (this.queue.isEmpty() && !needToStop()) {
             wait();
         }
-        if(this.queue.size() == this.MAX_ELEMENTS_COUNT){
+        if (this.queue.size() == this.MAX_ELEMENTS_COUNT) {
             notifyAll();
         }
         return this.queue.poll();

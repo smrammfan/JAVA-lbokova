@@ -20,7 +20,7 @@ public class MemoryUtils {
 
     public static long getFreeMemorySize() {
         System.gc();
-        return Runtime.getRuntime().freeMemory()/2;
+        return Runtime.getRuntime().freeMemory() / 2;
     }
 
     public static int getBytesCountInLine(String str) {
