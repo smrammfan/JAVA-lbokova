@@ -7,14 +7,14 @@ import java.util.*;
 
 public class Main {
 
-    public static final int THREADS_COUNT = 5;
-    public static final int TASKS_COUNT = 8;//3
-    public static final int TASKS_QUEUE_MAX_SIZE = 3;//6
-    public static final int TASK_DELAY = 1000;
-    public static final int TASK_NUMBER_TO_SHUTDOWN = 3;//2
-    public static final int FOREVER = 0;
-    public static final String OPTION_SHUTDOWN_AFTER_TASKS_COMPLETION = "-a";
-    public static final String OPTION_SHUTDOWN_BEFORE_TASKS_COMPLETION = "-b";
+    private static final int THREADS_COUNT = 5;
+    private static final int TASKS_COUNT = 8;//3
+    private static final int TASKS_QUEUE_MAX_SIZE = 3;//6
+    private static final int TASK_DELAY = 1000;
+    private static final int TASK_NUMBER_TO_SHUTDOWN = 3;//2
+    private static final int FOREVER = 0;
+    private static final String OPTION_SHUTDOWN_AFTER_TASKS_COMPLETION = "-a";
+    private static final String OPTION_SHUTDOWN_BEFORE_TASKS_COMPLETION = "-b";
 
     private static final Logger LOGGER = LogManager.getLogger(Main.class);
 

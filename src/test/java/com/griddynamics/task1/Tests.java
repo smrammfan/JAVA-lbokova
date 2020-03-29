@@ -111,7 +111,7 @@ public class Tests {
         String testFilePath = this.getClass().getClassLoader().getResource(TEST_FILE1_NAME).getPath();
         SubFilesCreator.createSortedSubFiles(Paths.get(testFilePath), 4, RESULT_FOLDER_PATH);
         workingFolders.add(RESULT_FOLDER_PATH);
-        Path oneSubFile = Paths.get(RESULT_FOLDER_PATH.toString(), SubFilesCreator.SUB_FILE_PREFIX + "1");
+        Path oneSubFile = Paths.get(RESULT_FOLDER_PATH.toString(), SubFilesCreator.getSubFileNameByNumber(1));
         //file #1
         List<String> allLines = FileUtils.readLines(oneSubFile.toFile());
         assertThat(allLines.size()).as("Wrong number lines in file" + oneSubFile + "!").isEqualTo(EXPECTED_SORTED_LINES_1.size());

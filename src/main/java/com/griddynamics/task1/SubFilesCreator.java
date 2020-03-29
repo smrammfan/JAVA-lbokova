@@ -11,8 +11,8 @@ import java.util.List;
 
 public class SubFilesCreator {
 
+    private static final String SUB_FILE_PREFIX = "SubFile_";
     private static final int ONE_LINE = 1;
-    public static final String SUB_FILE_PREFIX = "SubFile_";
     private static final Logger LOGGER = LogManager.getLogger(SubFilesCreator.class);
 
     public static void createSortedSubFiles(Path inputFilePath, int linesCountLimit, Path resultsFolderPath) throws FilesOperationException {

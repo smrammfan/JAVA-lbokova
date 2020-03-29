@@ -9,13 +9,13 @@ import java.util.Random;
 
 public class FileGenerator {
 
-    public static final String GENERATED_FILE_NAME = "Source.txt";
-    public static final String GENERATED_FILE_NAME_FIXED_LINES = "SourceFixed.txt";
-    public static final int NUMBERS_COUNT_IN_LINE = 20;
-    public static final int LINES_COUNT_IN_FILE_2MB = 20000;
-    public static final int MAX_BOUND_NUMBER_2MB = 20000;
-    public static final long SIZE = 1024 * 1024 * 4;
-    public static final int MAX_BOUND_NUMBER_512MB = 200000;
+    private static final String GENERATED_FILE_NAME = "Source.txt";
+    private static final String GENERATED_FILE_NAME_FIXED_LINES = "SourceFixed.txt";
+    private static final int NUMBERS_COUNT_IN_LINE = 20;
+    private static final int LINES_COUNT_IN_FILE_2MB = 20000;
+    private static final int MAX_BOUND_NUMBER_2MB = 20000;
+    private static final long SIZE = 1024 * 1024 * 4;
+    private static final int MAX_BOUND_NUMBER_512MB = 200000;
 
 
     public static void main(String[] args) {
@@ -24,7 +24,7 @@ public class FileGenerator {
         generateFileWithSize(GENERATED_FILE_NAME, NUMBERS_COUNT_IN_LINE, SIZE, MAX_BOUND_NUMBER_512MB);
     }
 
-    public static void generateFile(String generatedFileName, int numbersCountInLine, int linesCountInFile, int maxBoundNumber) {
+    private static void generateFile(String generatedFileName, int numbersCountInLine, int linesCountInFile, int maxBoundNumber) {
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(generatedFileName)
                 , StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE)) {
             for (int i = 1; i <= linesCountInFile; i++) {
@@ -39,7 +39,7 @@ public class FileGenerator {
         }
     }
 
-    public static void generateFileWithSize(String generatedFileName, int numbersCountInLine, long size, int maxBoundNumber) {
+    private static void generateFileWithSize(String generatedFileName, int numbersCountInLine, long size, int maxBoundNumber) {
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(generatedFileName)
                 , StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE)) {
             long generatedSize = 0;
@@ -56,7 +56,7 @@ public class FileGenerator {
         }
     }
 
-    public static String generateLine(int lineLength, int maxBoundNumber) {
+    private static String generateLine(int lineLength, int maxBoundNumber) {
         String str = "";
         for (int i = 0; i < lineLength; i++) {
             str += String.valueOf(new Random().nextInt(maxBoundNumber));
